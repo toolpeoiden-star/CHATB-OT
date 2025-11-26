@@ -704,40 +704,75 @@
     /* 반응형 */
     /* 모바일 반응형 */
     @media (max-width: 480px) {
-      .message-content { max-width: 92%; }
-      .message-bubble { padding: 14px 16px; font-size: 15px; }
-      .result-card { padding: 20px 16px; margin: 4px; border-radius: 24px; }
-      .gauge-value { font-size: 38px; }
-      .stat-value { font-size: 18px; }
-      .stat-card { padding: 16px 12px; }
-      .chat-header { padding: 14px 16px; }
-      .header-avatar { width: 42px; height: 42px; font-size: 20px; }
-      .header-info h1 { font-size: 16px; }
-      .chat-messages { padding: 14px; -webkit-overflow-scrolling: touch; }
-      .chat-input { padding: 12px 16px; padding-bottom: calc(12px + var(--safe-bottom)); }
-      .input-wrapper input { font-size: 16px !important; padding: 14px 16px; }
-      .send-btn { width: 48px; height: 48px; min-width: 48px; }
-      .choice-btn { padding: 12px 18px; font-size: 15px; min-height: 46px; }
-      .start-btn { padding: 16px 24px; font-size: 16px; min-height: 52px; }
-      .recommend-estimate { gap: 10px; padding: 12px; }
-      .recommend-estimate-row { flex-direction: column; gap: 4px; align-items: flex-start; }
-      .recommend-item-title { font-size: 15px; }
-      .recommend-item-body { padding: 14px; }
-      .cta-main-btn { font-size: 16px; padding: 16px 20px; min-height: 54px; }
-      .cta-item-btn { padding: 12px 16px; min-height: 46px; }
-      .calc-input, .calc-select { font-size: 16px !important; }
+      .message-wrapper { gap: 8px; }
+      .bot-avatar { width: 32px; height: 32px; font-size: 16px; border-radius: 10px; }
+      .message-content { max-width: 100%; }
+      .message-bubble { padding: 12px 14px; font-size: 15px; border-radius: 18px; }
+      .result-card { padding: 16px 10px; margin: 0; border-radius: 18px; }
+      .gauge-value { font-size: 36px; }
+      .stat-value { font-size: 17px; }
+      .stat-card { padding: 14px 8px; border-radius: 12px; }
+      .chat-header { padding: 12px 10px; }
+      .header-avatar { width: 38px; height: 38px; font-size: 18px; border-radius: 12px; }
+      .header-info h1 { font-size: 15px; }
+      .header-info p { font-size: 11px; }
+      .chat-messages { padding: 8px 6px; gap: 12px; -webkit-overflow-scrolling: touch; }
+      .chat-input { padding: 8px 6px; padding-bottom: calc(8px + var(--safe-bottom)); }
+      .input-wrapper { max-width: 100%; gap: 6px; }
+      .input-wrapper input { font-size: 16px !important; padding: 12px 14px; border-radius: 20px; }
+      .send-btn { width: 44px; height: 44px; min-width: 44px; flex-shrink: 0; }
+      .choice-btn { padding: 10px 14px; font-size: 14px; min-height: 44px; border-radius: 16px; }
+      .choice-buttons { gap: 6px; }
+      .start-btn { padding: 14px 18px; font-size: 15px; min-height: 48px; border-radius: 14px; }
+      .section-badge { font-size: 10px; padding: 3px 10px; }
+      .recommend-section { padding: 0; }
+      .recommend-estimate { gap: 6px; padding: 8px; border-radius: 10px; }
+      .recommend-estimate-row { flex-direction: column; gap: 3px; align-items: flex-start; font-size: 11px; }
+      .recommend-item { margin-bottom: 8px; border-radius: 14px; }
+      .recommend-item-header { padding: 10px; }
+      .recommend-item-number { width: 24px; height: 24px; font-size: 12px; }
+      .recommend-item-title { font-size: 14px; }
+      .recommend-item-org { font-size: 10px; }
+      .recommend-item-body { padding: 10px; }
+      .recommend-info-label { font-size: 11px; }
+      .recommend-info-value { font-size: 12px; }
+      .cta-main-btn { font-size: 15px; padding: 14px 12px; min-height: 50px; border-radius: 14px; }
+      .cta-item-btn { padding: 10px 12px; min-height: 42px; font-size: 13px; border-radius: 8px; }
+      .calc-input, .calc-select { font-size: 16px !important; padding: 10px 12px; }
       .calc-row-inline { grid-template-columns: 1fr; }
-      .biz-category-badge { padding: 10px 16px; font-size: 14px; }
-      .stats-banner { padding: 14px; }
-      .stats-banner-value { font-size: 18px; }
+      .biz-category-badge { padding: 8px 12px; font-size: 13px; border-radius: 8px; }
+      .biz-category-sub { font-size: 10px; }
+      .stats-banner { padding: 10px; border-radius: 12px; }
+      .stats-banner-value { font-size: 16px; }
+      .stats-banner-label { font-size: 9px; }
+      .result-stats { gap: 6px; }
+      .result-header { margin-bottom: 20px; }
+      .result-header h2 { font-size: 18px; }
+      .result-badge { font-size: 10px; padding: 5px 12px; }
+      .gauge-label { font-size: 13px; }
+      .insight-list { gap: 4px; }
+      .insight-item { padding: 6px 8px; font-size: 12px; border-radius: 8px; }
+      .insight-icon { font-size: 14px; }
+      .result-details summary { padding: 10px 12px; font-size: 12px; }
+      .details-grid { padding: 10px; font-size: 12px; }
+      .result-notice { font-size: 10px; padding: 10px; }
+      .restart-btn { padding: 14px 20px; font-size: 14px; }
     }
     
     /* 아주 작은 화면 */
     @media (max-width: 360px) {
-      .result-card { padding: 16px 14px; }
-      .gauge-value { font-size: 34px; }
-      .stat-value { font-size: 16px; }
-      .cta-main-btn { font-size: 15px; padding: 14px 18px; }
+      .chat-messages { padding: 6px 4px; gap: 10px; }
+      .chat-input { padding: 6px 4px; }
+      .message-wrapper { gap: 6px; }
+      .bot-avatar { width: 28px; height: 28px; font-size: 14px; }
+      .message-bubble { padding: 10px 12px; font-size: 14px; }
+      .result-card { padding: 14px 8px; }
+      .gauge-value { font-size: 32px; }
+      .stat-value { font-size: 15px; }
+      .cta-main-btn { font-size: 14px; padding: 12px 10px; }
+      .header-info h1 { font-size: 14px; }
+      .input-wrapper input { padding: 10px 12px; }
+      .send-btn { width: 40px; height: 40px; min-width: 40px; }
     }
 
     .svg-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
