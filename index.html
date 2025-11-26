@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -11,68 +10,45 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
   <style>
-    /* ============ 모바일 최적화 기본 설정 ============ */
+    /* 모바일 최적화 변수 */
     :root {
       --safe-top: env(safe-area-inset-top, 0px);
       --safe-bottom: env(safe-area-inset-bottom, 0px);
-      --safe-left: env(safe-area-inset-left, 0px);
-      --safe-right: env(safe-area-inset-right, 0px);
-      --primary: #6366f1;
-      --primary-dark: #4f46e5;
-      --bg-gradient: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
     }
-    
     * { 
       box-sizing: border-box; 
       margin: 0; 
       padding: 0;
       -webkit-tap-highlight-color: transparent;
-      -webkit-touch-callout: none;
     }
-    
-    html {
-      height: 100%;
-      height: -webkit-fill-available;
-    }
-    
+    html { height: -webkit-fill-available; }
     body {
-      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: var(--bg-gradient);
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
       min-height: 100vh;
       min-height: -webkit-fill-available;
       overflow: hidden;
       -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
       touch-action: manipulation;
     }
-    
-    /* 스크롤바 숨김 (모바일) */
-    ::-webkit-scrollbar { width: 0; height: 0; }
-    
     .chatbot-container {
       display: flex;
       flex-direction: column;
       height: 100vh;
-      height: 100dvh; /* 동적 뷰포트 높이 */
+      height: 100dvh;
       max-width: 100%;
       margin: 0 auto;
-      padding-top: var(--safe-top);
-      padding-bottom: var(--safe-bottom);
-      padding-left: var(--safe-left);
-      padding-right: var(--safe-right);
     }
 
-    /* ============ 헤더 ============ */
+    /* 헤더 */
     .chat-header {
       background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);
       padding: 16px 20px;
-      padding-top: calc(16px + var(--safe-top));
       color: white;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
       position: relative;
       overflow: hidden;
       flex-shrink: 0;
-      z-index: 100;
     }
     .chat-header::before {
       content: '';
@@ -148,30 +124,25 @@
     .progress-text { font-size: 12px; font-weight: 600; min-width: 36px; }
 
     /* 메시지 영역 */
-    /* ============ 메시지 영역 ============ */
     .chat-messages {
       flex: 1;
       overflow-y: auto;
-      overflow-x: hidden;
       padding: 20px;
       display: flex;
       flex-direction: column;
       gap: 16px;
-      scroll-behavior: smooth;
-      -webkit-overflow-scrolling: touch;
-      overscroll-behavior: contain;
-      scrollbar-width: none; /* Firefox */
     }
-    .chat-messages::-webkit-scrollbar { width: 0; display: none; }
+    .chat-messages::-webkit-scrollbar { width: 6px; }
+    .chat-messages::-webkit-scrollbar-track { background: transparent; }
+    .chat-messages::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
     .message-wrapper {
       display: flex;
       gap: 10px;
-      animation: messageIn 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-      will-change: transform, opacity;
+      animation: messageIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .message-wrapper.user { flex-direction: row-reverse; }
     @keyframes messageIn {
-      from { opacity: 0; transform: translateY(20px); }
+      from { opacity: 0; transform: translateY(16px); }
       to { opacity: 1; transform: translateY(0); }
     }
     .bot-avatar {
@@ -243,56 +214,49 @@
       gap: 8px;
       width: 100%;
       margin-top: 16px;
-      padding: 16px 24px;
+      padding: 14px 24px;
       background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
       color: white;
       border: none;
       border-radius: 16px;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
       font-family: inherit;
-      min-height: 54px;
-      -webkit-tap-highlight-color: transparent;
     }
-    .start-btn:active { transform: scale(0.98); }
-    .choice-buttons { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+    .start-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5); }
+    .start-btn:active { transform: translateY(0); }
+    .choice-buttons { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
     .choice-btn {
-      padding: 12px 20px;
+      padding: 10px 18px;
       background: #f1f5f9;
       border: 2px solid transparent;
-      border-radius: 22px;
-      font-size: 15px;
+      border-radius: 20px;
+      font-size: 14px;
       font-weight: 500;
       color: #475569;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       font-family: inherit;
-      min-height: 48px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      -webkit-tap-highlight-color: transparent;
     }
-    .choice-btn:active {
+    .choice-btn:hover {
       background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
       color: white;
-      transform: scale(0.97);
+      transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
     }
+    .choice-btn:active { transform: translateY(0); }
 
-    /* ============ 입력 영역 ============ */
+    /* 입력 영역 */
     .chat-input {
       display: none;
       background: white;
       padding: 16px 20px;
-      padding-bottom: calc(16px + var(--safe-bottom));
       border-top: 1px solid #e2e8f0;
       box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
       flex-shrink: 0;
-      z-index: 50;
     }
     .chat-input.active { display: block; }
     .input-wrapper { display: flex; gap: 12px; max-width: 600px; margin: 0 auto; }
@@ -301,12 +265,10 @@
       padding: 14px 20px;
       border: 2px solid #e2e8f0;
       border-radius: 24px;
-      font-size: 16px; /* iOS 줌 방지 */
+      font-size: 15px;
       transition: all 0.25s;
       background: #f8fafc;
       font-family: inherit;
-      -webkit-appearance: none;
-      appearance: none;
     }
     .input-wrapper input:focus {
       outline: none;
@@ -317,7 +279,6 @@
     .send-btn {
       width: 50px;
       height: 50px;
-      min-width: 50px;
       background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
       border: none;
       border-radius: 50%;
@@ -326,13 +287,13 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s ease;
+      transition: all 0.25s;
       box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
       flex-shrink: 0;
-      -webkit-tap-highlight-color: transparent;
     }
     .send-btn:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
-    .send-btn:not(:disabled):active { transform: scale(0.92); }
+    .send-btn:not(:disabled):hover { transform: scale(1.08); box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5); }
+    .send-btn:not(:disabled):active { transform: scale(1); }
 
     /* 결과 카드 */
     .result-card {
@@ -740,259 +701,43 @@
     .stats-banner-value { font-size: 20px; font-weight: 800; color: #fbbf24; }
     .stats-banner-label { font-size: 11px; opacity: 0.7; margin-top: 2px; }
 
-    /* ============ 모바일 반응형 (프리미엄) ============ */
-    
-    /* 태블릿 */
-    @media (max-width: 768px) {
-      .result-card { padding: 24px; margin: 8px; }
-      .stat-card { padding: 16px 12px; }
-      .recommend-item { margin-bottom: 12px; }
-    }
-    
-    /* 모바일 */
+    /* 반응형 */
+    /* 모바일 반응형 */
     @media (max-width: 480px) {
-      .chatbot-container {
-        height: 100dvh;
-        height: -webkit-fill-available;
-      }
-      
-      .chat-header { 
-        padding: 14px 16px;
-        padding-top: calc(14px + var(--safe-top));
-      }
-      .header-avatar { width: 42px; height: 42px; font-size: 20px; border-radius: 14px; }
-      .header-info h1 { font-size: 16px; }
-      
-      .chat-messages { 
-        padding: 12px; 
-        scroll-behavior: smooth;
-        -webkit-overflow-scrolling: touch;
-        overscroll-behavior: contain;
-      }
-      
       .message-content { max-width: 92%; }
-      .message-bubble { 
-        padding: 14px 16px; 
-        font-size: 15px; 
-        line-height: 1.6;
-        border-radius: 20px;
-      }
-      
-      .bot-avatar { width: 36px; height: 36px; font-size: 18px; border-radius: 12px; }
-      
-      /* 버튼 터치 친화적 */
-      .option-btn {
-        padding: 14px 18px !important;
-        font-size: 15px !important;
-        min-height: 48px;
-        border-radius: 14px !important;
-      }
-      
-      .option-btn:active {
-        transform: scale(0.97);
-        opacity: 0.9;
-      }
-      
-      /* 입력 영역 */
-      .chat-input {
-        padding: 12px 16px;
-        padding-bottom: calc(12px + var(--safe-bottom));
-      }
-      
-      .input-wrapper input {
-        font-size: 16px !important; /* iOS 줌 방지 */
-        padding: 14px 16px;
-        border-radius: 24px;
-      }
-      
-      .send-btn {
-        width: 46px;
-        height: 46px;
-        min-width: 46px;
-      }
-      
-      /* 결과 카드 */
-      .result-card { 
-        padding: 20px 16px; 
-        margin: 4px; 
-        border-radius: 24px;
-      }
-      
-      .result-header h2 { font-size: 20px; }
-      .result-badge { font-size: 11px; padding: 6px 14px; }
-      
-      .gauge-value { font-size: 40px; }
-      .gauge-unit { font-size: 18px; }
-      .gauge-label { font-size: 14px; }
-      
-      .result-stats { gap: 10px; }
-      .stat-card { padding: 16px 12px; border-radius: 16px; }
-      .stat-icon { font-size: 28px; }
-      .stat-label { font-size: 11px; }
+      .message-bubble { padding: 14px 16px; font-size: 15px; }
+      .result-card { padding: 20px 16px; margin: 4px; border-radius: 24px; }
+      .gauge-value { font-size: 38px; }
       .stat-value { font-size: 18px; }
-      
-      /* 추천 상품 */
-      .recommend-section h4 { font-size: 16px; }
-      .recommend-item { border-radius: 16px; }
-      .recommend-item-header { padding: 14px; }
-      .recommend-item-number { width: 28px; height: 28px; font-size: 13px; }
+      .stat-card { padding: 16px 12px; }
+      .chat-header { padding: 14px 16px; }
+      .header-avatar { width: 42px; height: 42px; font-size: 20px; }
+      .header-info h1 { font-size: 16px; }
+      .chat-messages { padding: 14px; -webkit-overflow-scrolling: touch; }
+      .chat-input { padding: 12px 16px; padding-bottom: calc(12px + var(--safe-bottom)); }
+      .input-wrapper input { font-size: 16px !important; padding: 14px 16px; }
+      .send-btn { width: 48px; height: 48px; min-width: 48px; }
+      .choice-btn { padding: 12px 18px; font-size: 15px; min-height: 46px; }
+      .start-btn { padding: 16px 24px; font-size: 16px; min-height: 52px; }
+      .recommend-estimate { gap: 10px; padding: 12px; }
+      .recommend-estimate-row { flex-direction: column; gap: 4px; align-items: flex-start; }
       .recommend-item-title { font-size: 15px; }
-      .recommend-item-org { font-size: 11px; }
       .recommend-item-body { padding: 14px; }
-      .recommend-info-label { font-size: 12px; }
-      .recommend-info-value { font-size: 13px; }
-      
-      .recommend-estimate { 
-        padding: 12px; 
-        border-radius: 12px;
-        gap: 10px;
-      }
-      .recommend-estimate-row { 
-        flex-direction: column; 
-        gap: 4px; 
-        align-items: flex-start;
-        font-size: 12px;
-      }
-      
-      /* CTA 버튼 모바일 */
-      .cta-main-btn { 
-        font-size: 16px; 
-        padding: 16px 20px;
-        border-radius: 14px;
-        min-height: 54px;
-      }
-      .cta-main-btn:active {
-        transform: scale(0.98);
-      }
-      
-      .cta-item-btn {
-        padding: 12px 16px;
-        font-size: 14px;
-        min-height: 46px;
-        border-radius: 10px;
-      }
-      .cta-item-btn:active {
-        transform: scale(0.97);
-      }
-      
-      /* 인사이트 */
-      .insight-item { padding: 10px 12px; font-size: 13px; }
-      .insight-icon { font-size: 16px; }
-      
-      /* 계산기 */
-      .calculator-header { padding: 14px 16px; font-size: 14px; }
-      .calc-row { margin-bottom: 14px; }
-      .calc-label { font-size: 13px; }
-      .calc-input, .calc-select { 
-        padding: 12px 14px; 
-        font-size: 16px !important; /* iOS 줌 방지 */
-        border-radius: 10px;
-      }
-      .calc-btn { 
-        padding: 14px; 
-        font-size: 15px;
-        min-height: 48px;
-      }
-      .calc-row-inline { grid-template-columns: 1fr; gap: 12px; }
-      
-      /* 상세정보 */
-      .result-details summary { padding: 12px 14px; font-size: 13px; }
-      .details-grid { padding: 14px; gap: 10px; font-size: 13px; }
-      
-      /* 공지 */
-      .result-notice { font-size: 11px; padding: 14px; line-height: 1.6; }
-      
-      /* 다시 분석 버튼 */
-      .restart-btn { 
-        padding: 16px 24px; 
-        font-size: 15px;
-        min-height: 52px;
-      }
-      .restart-btn:active {
-        transform: scale(0.97);
-      }
-      
-      /* 기업 분류 배지 */
-      .biz-category-badge { 
-        padding: 10px 16px; 
-        font-size: 14px;
-        border-radius: 10px;
-      }
-      .biz-category-sub { font-size: 11px; }
-      
-      /* 통계 배너 */
-      .stats-banner { padding: 14px; border-radius: 14px; }
-      .stats-banner-title { font-size: 12px; }
+      .cta-main-btn { font-size: 16px; padding: 16px 20px; min-height: 54px; }
+      .cta-item-btn { padding: 12px 16px; min-height: 46px; }
+      .calc-input, .calc-select { font-size: 16px !important; }
+      .calc-row-inline { grid-template-columns: 1fr; }
+      .biz-category-badge { padding: 10px 16px; font-size: 14px; }
+      .stats-banner { padding: 14px; }
       .stats-banner-value { font-size: 18px; }
-      .stats-banner-label { font-size: 10px; }
     }
     
-    /* 아주 작은 화면 (SE, 구형 폰) */
+    /* 아주 작은 화면 */
     @media (max-width: 360px) {
-      .chat-header { padding: 12px 14px; }
-      .header-info h1 { font-size: 15px; }
-      .header-avatar { width: 38px; height: 38px; }
-      
-      .message-bubble { padding: 12px 14px; font-size: 14px; }
-      .option-btn { padding: 12px 14px !important; font-size: 14px !important; }
-      
       .result-card { padding: 16px 14px; }
-      .gauge-value { font-size: 36px; }
+      .gauge-value { font-size: 34px; }
       .stat-value { font-size: 16px; }
-      
-      .recommend-item-title { font-size: 14px; }
       .cta-main-btn { font-size: 15px; padding: 14px 18px; }
-    }
-    
-    /* 랜드스케이프 모드 */
-    @media (max-height: 500px) and (orientation: landscape) {
-      .chat-header { padding: 10px 16px; }
-      .header-avatar { width: 36px; height: 36px; }
-      .result-gauge svg { width: 100px; height: 100px; }
-      .gauge-value { font-size: 28px; }
-      .result-stats { flex-direction: row; }
-    }
-    
-    /* 다크모드 지원 */
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg-gradient: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
-      }
-    }
-    
-    /* 고대비 모드 */
-    @media (prefers-contrast: high) {
-      .option-btn { border: 2px solid #1e1b4b; }
-      .message-bubble { border: 1px solid #e2e8f0; }
-    }
-    
-    /* 모션 감소 설정 존중 */
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-      }
-    }
-    
-    /* 태블릿/데스크탑 모달 스타일 */
-    @media (min-width: 600px) {
-      .modal-overlay {
-        align-items: center;
-        padding: 20px;
-      }
-      .modal-content {
-        border-radius: 24px;
-        max-height: 85vh;
-        animation: modalCenterIn 0.3s ease;
-      }
-      .modal-content::before {
-        display: none; /* 드래그 핸들 숨김 */
-      }
-      @keyframes modalCenterIn {
-        from { opacity: 0; transform: scale(0.9) translateY(20px); }
-        to { opacity: 1; transform: scale(1) translateY(0); }
-      }
     }
 
     .svg-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
@@ -1014,11 +759,9 @@
       border-radius: 16px;
       cursor: pointer;
       box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
-      transition: all 0.2s ease;
+      transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
-      min-height: 58px;
-      -webkit-tap-highlight-color: transparent;
     }
     .cta-main-btn::before {
       content: '';
@@ -1034,9 +777,12 @@
       0% { left: -100%; }
       100% { left: 100%; }
     }
+    .cta-main-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(99, 102, 241, 0.5);
+    }
     .cta-main-btn:active {
-      transform: scale(0.98);
-      box-shadow: 0 4px 16px rgba(99, 102, 241, 0.35);
+      transform: translateY(0);
     }
 
     .cta-item-btn {
@@ -1044,7 +790,7 @@
       align-items: center;
       justify-content: center;
       gap: 6px;
-      padding: 12px 16px;
+      padding: 10px 16px;
       margin-top: 0;
       background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
       color: white;
@@ -1054,17 +800,15 @@
       border-radius: 10px;
       cursor: pointer;
       width: 100%;
-      transition: all 0.2s ease;
+      transition: all 0.25s ease;
       box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-      min-height: 48px;
-      -webkit-tap-highlight-color: transparent;
     }
-    .cta-item-btn:active {
-      transform: scale(0.97);
-      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+    .cta-item-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
     }
 
-    /* ============ 모달 스타일 (모바일 최적화) ============ */
+    /* ============ 모달 스타일 ============ */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -1074,13 +818,12 @@
       height: 100dvh;
       display: none;
       justify-content: center;
-      align-items: flex-end; /* 모바일에서 하단 정렬 */
+      align-items: flex-end;
       background: rgba(0, 0, 0, 0.6);
       backdrop-filter: blur(4px);
       -webkit-backdrop-filter: blur(4px);
       z-index: 9999;
       padding: 0;
-      overscroll-behavior: contain;
     }
     .modal-overlay.show {
       display: flex;
@@ -1093,18 +836,12 @@
       padding: 28px 24px;
       padding-bottom: calc(28px + var(--safe-bottom));
       position: relative;
-      animation: modalSlideUp 0.35s cubic-bezier(0.32, 0.72, 0, 1);
-      max-height: 92vh;
-      max-height: 92dvh;
+      animation: modalSlideUp 0.3s ease;
+      max-height: 90vh;
+      max-height: 90dvh;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
-      overscroll-behavior: contain;
     }
-    @keyframes modalSlideUp {
-      from { opacity: 0; transform: translateY(100%); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    /* 드래그 핸들 */
     .modal-content::before {
       content: '';
       position: absolute;
@@ -1115,6 +852,19 @@
       height: 4px;
       background: #d1d5db;
       border-radius: 2px;
+    }
+    @keyframes modalSlideUp {
+      from { opacity: 0; transform: translateY(100%); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (min-width: 600px) {
+      .modal-overlay { align-items: center; padding: 20px; }
+      .modal-content { border-radius: 24px; animation: modalIn 0.3s ease; }
+      .modal-content::before { display: none; }
+      @keyframes modalIn {
+        from { opacity: 0; transform: scale(0.95); }
+        to { opacity: 1; transform: scale(1); }
+      }
     }
     .modal-close {
       position: absolute;
@@ -1132,19 +882,17 @@
       align-items: center;
       justify-content: center;
       transition: all 0.2s;
-      -webkit-tap-highlight-color: transparent;
     }
-    .modal-close:active {
-      transform: scale(0.92);
+    .modal-close:hover {
       background: #e2e8f0;
+      color: #334155;
     }
     .modal-header {
       text-align: center;
       margin-bottom: 24px;
-      margin-top: 10px;
     }
     .modal-header h3 {
-      font-size: 20px;
+      font-size: 22px;
       font-weight: 700;
       color: #1e1b4b;
       margin-bottom: 8px;
@@ -1248,7 +996,6 @@
       text-decoration: underline;
       cursor: pointer;
       font-weight: 600;
-      -webkit-tap-highlight-color: transparent;
     }
     .submit-btn {
       width: 100%;
@@ -1260,14 +1007,12 @@
       border: none;
       border-radius: 14px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.3s;
       box-shadow: 0 6px 20px rgba(99, 102, 241, 0.35);
-      min-height: 54px;
-      -webkit-tap-highlight-color: transparent;
     }
-    .submit-btn:active {
-      transform: scale(0.98);
-      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(99, 102, 241, 0.45);
     }
     .submit-btn:disabled {
       background: #cbd5e1;
@@ -1455,7 +1200,7 @@
       <p>
         정책자금연구소 바름 / 대표: 김수용<br>
         서울특별시 강남구 봉은사로30길 68 6층 35호<br>
-        1533-9784 · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="553934377b373427302038153238343c397b363a38">[email&#160;protected]</a><br>
+        1533-9784 · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f09c9192de92918295859db0979d91999cde939f9d">[email&#160;protected]</a><br>
         사업자등록번호 340-49-00912
       </p>
       
@@ -2928,4 +2673,14 @@
       });
 
       userInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter' && this.value.trim()
+        if (e.key === 'Enter' && this.value.trim()) handleSubmit(this.value.trim());
+      });
+
+      sendBtn.addEventListener('click', function() {
+        const value = userInput.value.trim();
+        if (value) handleSubmit(value);
+      });
+    });
+  </script>
+</body>
+</html>
