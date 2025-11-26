@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -10,30 +11,68 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
-      min-height: 100vh;
-      overflow: hidden;
+    /* ============ 모바일 최적화 기본 설정 ============ */
+    :root {
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --safe-left: env(safe-area-inset-left, 0px);
+      --safe-right: env(safe-area-inset-right, 0px);
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --bg-gradient: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
     }
+    
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+    }
+    
+    html {
+      height: 100%;
+      height: -webkit-fill-available;
+    }
+    
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg-gradient);
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      touch-action: manipulation;
+    }
+    
+    /* 스크롤바 숨김 (모바일) */
+    ::-webkit-scrollbar { width: 0; height: 0; }
+    
     .chatbot-container {
       display: flex;
       flex-direction: column;
       height: 100vh;
+      height: 100dvh; /* 동적 뷰포트 높이 */
       max-width: 100%;
       margin: 0 auto;
+      padding-top: var(--safe-top);
+      padding-bottom: var(--safe-bottom);
+      padding-left: var(--safe-left);
+      padding-right: var(--safe-right);
     }
 
-    /* 헤더 */
+    /* ============ 헤더 ============ */
     .chat-header {
       background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);
       padding: 16px 20px;
+      padding-top: calc(16px + var(--safe-top));
       color: white;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
       position: relative;
       overflow: hidden;
       flex-shrink: 0;
+      z-index: 100;
     }
     .chat-header::before {
       content: '';
@@ -109,25 +148,30 @@
     .progress-text { font-size: 12px; font-weight: 600; min-width: 36px; }
 
     /* 메시지 영역 */
+    /* ============ 메시지 영역 ============ */
     .chat-messages {
       flex: 1;
       overflow-y: auto;
+      overflow-x: hidden;
       padding: 20px;
       display: flex;
       flex-direction: column;
       gap: 16px;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      scrollbar-width: none; /* Firefox */
     }
-    .chat-messages::-webkit-scrollbar { width: 6px; }
-    .chat-messages::-webkit-scrollbar-track { background: transparent; }
-    .chat-messages::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    .chat-messages::-webkit-scrollbar { width: 0; display: none; }
     .message-wrapper {
       display: flex;
       gap: 10px;
-      animation: messageIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      animation: messageIn 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: transform, opacity;
     }
     .message-wrapper.user { flex-direction: row-reverse; }
     @keyframes messageIn {
-      from { opacity: 0; transform: translateY(16px); }
+      from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
     .bot-avatar {
@@ -199,49 +243,56 @@
       gap: 8px;
       width: 100%;
       margin-top: 16px;
-      padding: 14px 24px;
+      padding: 16px 24px;
       background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
       color: white;
       border: none;
       border-radius: 16px;
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.2s ease;
       box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
       font-family: inherit;
+      min-height: 54px;
+      -webkit-tap-highlight-color: transparent;
     }
-    .start-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5); }
-    .start-btn:active { transform: translateY(0); }
-    .choice-buttons { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .start-btn:active { transform: scale(0.98); }
+    .choice-buttons { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
     .choice-btn {
-      padding: 10px 18px;
+      padding: 12px 20px;
       background: #f1f5f9;
       border: 2px solid transparent;
-      border-radius: 20px;
-      font-size: 14px;
+      border-radius: 22px;
+      font-size: 15px;
       font-weight: 500;
       color: #475569;
       cursor: pointer;
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.2s ease;
       font-family: inherit;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      -webkit-tap-highlight-color: transparent;
     }
-    .choice-btn:hover {
+    .choice-btn:active {
       background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
       color: white;
-      transform: translateY(-2px);
+      transform: scale(0.97);
       box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
     }
-    .choice-btn:active { transform: translateY(0); }
 
-    /* 입력 영역 */
+    /* ============ 입력 영역 ============ */
     .chat-input {
       display: none;
       background: white;
       padding: 16px 20px;
+      padding-bottom: calc(16px + var(--safe-bottom));
       border-top: 1px solid #e2e8f0;
       box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
       flex-shrink: 0;
+      z-index: 50;
     }
     .chat-input.active { display: block; }
     .input-wrapper { display: flex; gap: 12px; max-width: 600px; margin: 0 auto; }
@@ -250,10 +301,12 @@
       padding: 14px 20px;
       border: 2px solid #e2e8f0;
       border-radius: 24px;
-      font-size: 15px;
+      font-size: 16px; /* iOS 줌 방지 */
       transition: all 0.25s;
       background: #f8fafc;
       font-family: inherit;
+      -webkit-appearance: none;
+      appearance: none;
     }
     .input-wrapper input:focus {
       outline: none;
@@ -264,6 +317,7 @@
     .send-btn {
       width: 50px;
       height: 50px;
+      min-width: 50px;
       background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
       border: none;
       border-radius: 50%;
@@ -272,13 +326,13 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.25s;
+      transition: all 0.2s ease;
       box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
       flex-shrink: 0;
+      -webkit-tap-highlight-color: transparent;
     }
     .send-btn:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
-    .send-btn:not(:disabled):hover { transform: scale(1.08); box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5); }
-    .send-btn:not(:disabled):active { transform: scale(1); }
+    .send-btn:not(:disabled):active { transform: scale(0.92); }
 
     /* 결과 카드 */
     .result-card {
@@ -421,13 +475,19 @@
     .recommend-info-value.highlight { color: #6366f1; font-weight: 700; }
     .recommend-estimate {
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
+      gap: 10px;
       margin-top: 12px;
-      padding: 10px 12px;
+      padding: 12px 14px;
       background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
       border-radius: 10px;
-      font-size: 12px;
+      font-size: 13px;
       color: #4338ca;
+    }
+    .recommend-estimate-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
     .recommend-estimate strong { font-weight: 700; }
     
@@ -680,19 +740,606 @@
     .stats-banner-value { font-size: 20px; font-weight: 800; color: #fbbf24; }
     .stats-banner-label { font-size: 11px; opacity: 0.7; margin-top: 2px; }
 
-    /* 반응형 */
+    /* ============ 모바일 반응형 (프리미엄) ============ */
+    
+    /* 태블릿 */
+    @media (max-width: 768px) {
+      .result-card { padding: 24px; margin: 8px; }
+      .stat-card { padding: 16px 12px; }
+      .recommend-item { margin-bottom: 12px; }
+    }
+    
+    /* 모바일 */
     @media (max-width: 480px) {
-      .message-content { max-width: 90%; }
-      .result-card { padding: 20px; margin: 4px; border-radius: 24px; }
-      .gauge-value { font-size: 36px; }
+      .chatbot-container {
+        height: 100dvh;
+        height: -webkit-fill-available;
+      }
+      
+      .chat-header { 
+        padding: 14px 16px;
+        padding-top: calc(14px + var(--safe-top));
+      }
+      .header-avatar { width: 42px; height: 42px; font-size: 20px; border-radius: 14px; }
+      .header-info h1 { font-size: 16px; }
+      
+      .chat-messages { 
+        padding: 12px; 
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+      }
+      
+      .message-content { max-width: 92%; }
+      .message-bubble { 
+        padding: 14px 16px; 
+        font-size: 15px; 
+        line-height: 1.6;
+        border-radius: 20px;
+      }
+      
+      .bot-avatar { width: 36px; height: 36px; font-size: 18px; border-radius: 12px; }
+      
+      /* 버튼 터치 친화적 */
+      .option-btn {
+        padding: 14px 18px !important;
+        font-size: 15px !important;
+        min-height: 48px;
+        border-radius: 14px !important;
+      }
+      
+      .option-btn:active {
+        transform: scale(0.97);
+        opacity: 0.9;
+      }
+      
+      /* 입력 영역 */
+      .chat-input {
+        padding: 12px 16px;
+        padding-bottom: calc(12px + var(--safe-bottom));
+      }
+      
+      .input-wrapper input {
+        font-size: 16px !important; /* iOS 줌 방지 */
+        padding: 14px 16px;
+        border-radius: 24px;
+      }
+      
+      .send-btn {
+        width: 46px;
+        height: 46px;
+        min-width: 46px;
+      }
+      
+      /* 결과 카드 */
+      .result-card { 
+        padding: 20px 16px; 
+        margin: 4px; 
+        border-radius: 24px;
+      }
+      
+      .result-header h2 { font-size: 20px; }
+      .result-badge { font-size: 11px; padding: 6px 14px; }
+      
+      .gauge-value { font-size: 40px; }
+      .gauge-unit { font-size: 18px; }
+      .gauge-label { font-size: 14px; }
+      
+      .result-stats { gap: 10px; }
+      .stat-card { padding: 16px 12px; border-radius: 16px; }
+      .stat-icon { font-size: 28px; }
+      .stat-label { font-size: 11px; }
       .stat-value { font-size: 18px; }
-      .chat-header { padding: 14px 16px; }
-      .chat-messages { padding: 16px; }
-      .recommend-estimate { flex-direction: column; gap: 4px; }
-      .calc-row-inline { grid-template-columns: 1fr; }
+      
+      /* 추천 상품 */
+      .recommend-section h4 { font-size: 16px; }
+      .recommend-item { border-radius: 16px; }
+      .recommend-item-header { padding: 14px; }
+      .recommend-item-number { width: 28px; height: 28px; font-size: 13px; }
+      .recommend-item-title { font-size: 15px; }
+      .recommend-item-org { font-size: 11px; }
+      .recommend-item-body { padding: 14px; }
+      .recommend-info-label { font-size: 12px; }
+      .recommend-info-value { font-size: 13px; }
+      
+      .recommend-estimate { 
+        padding: 12px; 
+        border-radius: 12px;
+        gap: 10px;
+      }
+      .recommend-estimate-row { 
+        flex-direction: column; 
+        gap: 4px; 
+        align-items: flex-start;
+        font-size: 12px;
+      }
+      
+      /* CTA 버튼 모바일 */
+      .cta-main-btn { 
+        font-size: 16px; 
+        padding: 16px 20px;
+        border-radius: 14px;
+        min-height: 54px;
+      }
+      .cta-main-btn:active {
+        transform: scale(0.98);
+      }
+      
+      .cta-item-btn {
+        padding: 12px 16px;
+        font-size: 14px;
+        min-height: 46px;
+        border-radius: 10px;
+      }
+      .cta-item-btn:active {
+        transform: scale(0.97);
+      }
+      
+      /* 인사이트 */
+      .insight-item { padding: 10px 12px; font-size: 13px; }
+      .insight-icon { font-size: 16px; }
+      
+      /* 계산기 */
+      .calculator-header { padding: 14px 16px; font-size: 14px; }
+      .calc-row { margin-bottom: 14px; }
+      .calc-label { font-size: 13px; }
+      .calc-input, .calc-select { 
+        padding: 12px 14px; 
+        font-size: 16px !important; /* iOS 줌 방지 */
+        border-radius: 10px;
+      }
+      .calc-btn { 
+        padding: 14px; 
+        font-size: 15px;
+        min-height: 48px;
+      }
+      .calc-row-inline { grid-template-columns: 1fr; gap: 12px; }
+      
+      /* 상세정보 */
+      .result-details summary { padding: 12px 14px; font-size: 13px; }
+      .details-grid { padding: 14px; gap: 10px; font-size: 13px; }
+      
+      /* 공지 */
+      .result-notice { font-size: 11px; padding: 14px; line-height: 1.6; }
+      
+      /* 다시 분석 버튼 */
+      .restart-btn { 
+        padding: 16px 24px; 
+        font-size: 15px;
+        min-height: 52px;
+      }
+      .restart-btn:active {
+        transform: scale(0.97);
+      }
+      
+      /* 기업 분류 배지 */
+      .biz-category-badge { 
+        padding: 10px 16px; 
+        font-size: 14px;
+        border-radius: 10px;
+      }
+      .biz-category-sub { font-size: 11px; }
+      
+      /* 통계 배너 */
+      .stats-banner { padding: 14px; border-radius: 14px; }
+      .stats-banner-title { font-size: 12px; }
+      .stats-banner-value { font-size: 18px; }
+      .stats-banner-label { font-size: 10px; }
+    }
+    
+    /* 아주 작은 화면 (SE, 구형 폰) */
+    @media (max-width: 360px) {
+      .chat-header { padding: 12px 14px; }
+      .header-info h1 { font-size: 15px; }
+      .header-avatar { width: 38px; height: 38px; }
+      
+      .message-bubble { padding: 12px 14px; font-size: 14px; }
+      .option-btn { padding: 12px 14px !important; font-size: 14px !important; }
+      
+      .result-card { padding: 16px 14px; }
+      .gauge-value { font-size: 36px; }
+      .stat-value { font-size: 16px; }
+      
+      .recommend-item-title { font-size: 14px; }
+      .cta-main-btn { font-size: 15px; padding: 14px 18px; }
+    }
+    
+    /* 랜드스케이프 모드 */
+    @media (max-height: 500px) and (orientation: landscape) {
+      .chat-header { padding: 10px 16px; }
+      .header-avatar { width: 36px; height: 36px; }
+      .result-gauge svg { width: 100px; height: 100px; }
+      .gauge-value { font-size: 28px; }
+      .result-stats { flex-direction: row; }
+    }
+    
+    /* 다크모드 지원 */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-gradient: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+      }
+    }
+    
+    /* 고대비 모드 */
+    @media (prefers-contrast: high) {
+      .option-btn { border: 2px solid #1e1b4b; }
+      .message-bubble { border: 1px solid #e2e8f0; }
+    }
+    
+    /* 모션 감소 설정 존중 */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+    
+    /* 태블릿/데스크탑 모달 스타일 */
+    @media (min-width: 600px) {
+      .modal-overlay {
+        align-items: center;
+        padding: 20px;
+      }
+      .modal-content {
+        border-radius: 24px;
+        max-height: 85vh;
+        animation: modalCenterIn 0.3s ease;
+      }
+      .modal-content::before {
+        display: none; /* 드래그 핸들 숨김 */
+      }
+      @keyframes modalCenterIn {
+        from { opacity: 0; transform: scale(0.9) translateY(20px); }
+        to { opacity: 1; transform: scale(1) translateY(0); }
+      }
     }
 
     .svg-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+    /* ============ CTA 버튼 스타일 ============ */
+    .cta-main-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 18px 24px;
+      margin: 16px 0;
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+      color: white;
+      font-size: 18px;
+      font-weight: 700;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+      min-height: 58px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .cta-main-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+      animation: cta-shine 2s infinite;
+    }
+    @keyframes cta-shine {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+    .cta-main-btn:active {
+      transform: scale(0.98);
+      box-shadow: 0 4px 16px rgba(99, 102, 241, 0.35);
+    }
+
+    .cta-item-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 12px 16px;
+      margin-top: 0;
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+      min-height: 48px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .cta-item-btn:active {
+      transform: scale(0.97);
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+    }
+
+    /* ============ 모달 스타일 (모바일 최적화) ============ */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      display: none;
+      justify-content: center;
+      align-items: flex-end; /* 모바일에서 하단 정렬 */
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 9999;
+      padding: 0;
+      overscroll-behavior: contain;
+    }
+    .modal-overlay.show {
+      display: flex;
+    }
+    .modal-content {
+      width: 100%;
+      max-width: 500px;
+      background: white;
+      border-radius: 24px 24px 0 0;
+      padding: 28px 24px;
+      padding-bottom: calc(28px + var(--safe-bottom));
+      position: relative;
+      animation: modalSlideUp 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+      max-height: 92vh;
+      max-height: 92dvh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+    }
+    @keyframes modalSlideUp {
+      from { opacity: 0; transform: translateY(100%); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* 드래그 핸들 */
+    .modal-content::before {
+      content: '';
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 4px;
+      background: #d1d5db;
+      border-radius: 2px;
+    }
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 36px;
+      height: 36px;
+      background: #f1f5f9;
+      border: none;
+      border-radius: 50%;
+      font-size: 22px;
+      color: #64748b;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .modal-close:active {
+      transform: scale(0.92);
+      background: #e2e8f0;
+    }
+    .modal-header {
+      text-align: center;
+      margin-bottom: 24px;
+      margin-top: 10px;
+    }
+    .modal-header h3 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1e1b4b;
+      margin-bottom: 8px;
+    }
+    .modal-header p {
+      font-size: 14px;
+      color: #64748b;
+    }
+    .modal-product-info {
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 20px;
+      border: 1px solid #bae6fd;
+    }
+    .modal-product-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: #0369a1;
+      margin-bottom: 4px;
+    }
+    .modal-product-detail {
+      font-size: 13px;
+      color: #0284c7;
+    }
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 8px;
+    }
+    .form-label .required {
+      color: #ef4444;
+      margin-left: 2px;
+    }
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      font-size: 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .form-input:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+    .form-input::placeholder {
+      color: #9ca3af;
+    }
+    .phone-input-group {
+      display: flex;
+      gap: 8px;
+    }
+    .phone-input-group select {
+      flex: 0 0 90px;
+      padding: 14px 12px;
+      font-size: 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      outline: none;
+      background: white;
+      cursor: pointer;
+    }
+    .phone-input-group select:focus {
+      border-color: #6366f1;
+    }
+    .phone-input-group input {
+      flex: 1;
+      text-align: center;
+    }
+    .agreement-box {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 14px;
+      background: #f8fafc;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+    .agreement-box input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      cursor: pointer;
+      accent-color: #6366f1;
+    }
+    .agreement-box label {
+      font-size: 14px;
+      color: #374151;
+      cursor: pointer;
+      line-height: 1.5;
+    }
+    .agreement-box .privacy-link {
+      color: #6366f1;
+      text-decoration: underline;
+      cursor: pointer;
+      font-weight: 600;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      color: white;
+      font-size: 17px;
+      font-weight: 700;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.35);
+      min-height: 54px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .submit-btn:active {
+      transform: scale(0.98);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+    .submit-btn:disabled {
+      background: #cbd5e1;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* 개인정보취급방침 모달 */
+    .privacy-modal-content {
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    .privacy-modal-content h4 {
+      font-size: 18px;
+      color: #1e1b4b;
+      margin: 20px 0 12px 0;
+    }
+    .privacy-modal-content h4:first-child {
+      margin-top: 0;
+    }
+    .privacy-modal-content p {
+      font-size: 14px;
+      color: #4b5563;
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+    .privacy-modal-content ul {
+      margin: 8px 0 16px 20px;
+      font-size: 14px;
+      color: #4b5563;
+      line-height: 1.7;
+    }
+
+    /* 성공 모달 */
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 40px;
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+    }
+    .success-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #1e1b4b;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .success-message {
+      font-size: 15px;
+      color: #64748b;
+      text-align: center;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+    .success-btn {
+      width: 100%;
+      padding: 16px;
+      background: #10b981;
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -739,7 +1386,285 @@
     </footer>
   </div>
 
-  <script>
+  <!-- 상담 신청 모달 -->
+  <div id="consultModal" class="modal-overlay">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('consultModal')">&times;</button>
+      <div class="modal-header">
+        <h3>📋 정책자금 상담 신청</h3>
+        <p>전문 상담사가 빠르게 연락드립니다</p>
+      </div>
+      <div id="modalProductInfo" class="modal-product-info" style="display:none;">
+        <div class="modal-product-name" id="modalProductName"></div>
+        <div class="modal-product-detail" id="modalProductDetail"></div>
+      </div>
+      <form id="consultForm" onsubmit="submitConsultForm(event)">
+        <div class="form-group">
+          <label class="form-label">성함(이름)<span class="required">*</span></label>
+          <input type="text" id="clientName" class="form-input" placeholder="대표자 성함" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">연락처<span class="required">*</span></label>
+          <div class="phone-input-group">
+            <select id="phone1">
+              <option value="010">010</option>
+              <option value="011">011</option>
+            </select>
+            <input type="text" id="phone2" class="form-input" maxlength="4" inputmode="numeric" placeholder="0000" required>
+            <input type="text" id="phone3" class="form-input" maxlength="4" inputmode="numeric" placeholder="0000" required>
+          </div>
+        </div>
+        <div class="agreement-box">
+          <input type="checkbox" id="agreePrivacy" required>
+          <label for="agreePrivacy">
+            <span class="privacy-link" onclick="openModal('privacyModal'); event.stopPropagation();">[개인정보취급방침]</span>에 동의합니다 <span style="color:#ef4444;">*</span>
+          </label>
+        </div>
+        <button type="submit" class="submit-btn" id="submitBtn">정책자금 상담 신청하기</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 개인정보취급방침 모달 -->
+  <div id="privacyModal" class="modal-overlay">
+    <div class="modal-content privacy-modal-content">
+      <button class="modal-close" onclick="closeModal('privacyModal')">&times;</button>
+      <h3 style="font-size:20px;font-weight:700;margin-bottom:20px;color:#1e1b4b;">개인정보취급방침</h3>
+      <h4>가. 수집하는 개인정보 항목 및 수집방법</h4>
+      <p>– 성명, 연락처(휴대전화 번호), 사업자명, 업종, 연매출액 규모</p>
+      
+      <h4>나. 개인정보의 수집 및 이용목적</h4>
+      <ul>
+        <li>담당자들의 전화 및 문자 상담·안내</li>
+        <li>추후 문자(SMS)를 통한 정책자금 정보 수신</li>
+        <li>정책자금연구소 바름 홍보/광고내용 수신</li>
+      </ul>
+      
+      <h4>다. 보유 및 이용기간</h4>
+      <p>상담 완료 후 관계 법령이 정한 기간 또는 본인 요청 시까지 보유·이용</p>
+      <ul>
+        <li>전자상거래법: 계약·결제·분쟁 기록 5년</li>
+        <li>세법: 장부 및 증빙 5년</li>
+        <li>통신비밀보호법: 접속 로그 3개월</li>
+      </ul>
+      
+      <h4>라. 동의 거부 시 안내</h4>
+      <p>필수 정보 동의 거부 시 상담 및 정보 제공이 제한될 수 있습니다.</p>
+      
+      <h4>문의</h4>
+      <p>
+        정책자금연구소 바름 / 대표: 김수용<br>
+        서울특별시 강남구 봉은사로30길 68 6층 35호<br>
+        1533-9784 · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="553934377b373427302038153238343c397b363a38">[email&#160;protected]</a><br>
+        사업자등록번호 340-49-00912
+      </p>
+      
+      <button class="submit-btn" style="margin-top:20px;" onclick="closeModal('privacyModal')">확인</button>
+    </div>
+  </div>
+
+  <!-- 성공 모달 -->
+  <div id="successModal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="success-icon">✓</div>
+      <div class="success-title">신청이 완료되었습니다!</div>
+      <div class="success-message">
+        전문 상담사가 빠른 시간 내에<br>연락드리겠습니다.<br><br>
+        <strong>상담 가능 시간:</strong> 평일 09:00 ~ 18:00
+      </div>
+      <button class="success-btn" onclick="closeModal('successModal')">확인</button>
+    </div>
+  </div>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    // ============ 유입경로 추적 ============
+    (function() {
+      const KEY = 'first_referrer';
+      if (!sessionStorage.getItem(KEY)) {
+        const url = new URL(location.href);
+        const fromParam = url.searchParams.get('from') || url.searchParams.get('utm_source') || 
+                          url.searchParams.get('utm_medium') || url.searchParams.get('utm_campaign');
+        const fullReferrer = document.referrer;
+        let refValue = "직접 방문";
+
+        if (fromParam) {
+          refValue = `from/utm: ${fromParam}`;
+        } else if (fullReferrer) {
+          refValue = fullReferrer;
+          if (fullReferrer.includes("blog.naver")) refValue = `네이버 블로그: ${fullReferrer}`;
+          if (fullReferrer.includes("cafe.naver")) refValue = `네이버 카페: ${fullReferrer}`;
+          if (fullReferrer.includes("instagram")) refValue = `인스타그램: ${fullReferrer}`;
+          if (fullReferrer.includes("youtube")) refValue = `유튜브: ${fullReferrer}`;
+          if (fullReferrer.includes("facebook")) refValue = `페이스북: ${fullReferrer}`;
+          if (fullReferrer.includes("kakao")) refValue = `카카오톡: ${fullReferrer}`;
+        } else {
+          refValue = `랜딩: ${location.href}`;
+        }
+        sessionStorage.setItem(KEY, refValue);
+      }
+    })();
+
+    // ============ 분석 결과 저장 변수 ============
+    let analysisResult = {
+      limit: 0,
+      rate: 0,
+      probability: 0,
+      products: [],
+      bizCategory: ''
+    };
+    let selectedProduct = null;
+    let isSubmitting = false;
+
+    // ============ 모달 함수 ============
+    function openModal(modalId, productInfo = null) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        
+        // 상품 정보가 있으면 표시
+        if (productInfo && modalId === 'consultModal') {
+          selectedProduct = productInfo;
+          const productInfoDiv = document.getElementById('modalProductInfo');
+          const productNameEl = document.getElementById('modalProductName');
+          const productDetailEl = document.getElementById('modalProductDetail');
+          
+          productInfoDiv.style.display = 'block';
+          productNameEl.textContent = `📌 ${productInfo.name} (${productInfo.org})`;
+          productDetailEl.textContent = `최대 ${formatLimit(productInfo.maxLimit)} | 금리 ${productInfo.minRate}%~`;
+        } else if (modalId === 'consultModal') {
+          selectedProduct = null;
+          document.getElementById('modalProductInfo').style.display = 'none';
+        }
+      }
+    }
+
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+      }
+    }
+
+    // 모달 외부 클릭 시 닫기
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('modal-overlay')) {
+        e.target.classList.remove('show');
+        document.body.style.overflow = '';
+      }
+    });
+
+    // ============ Google Sheets 전송 함수 ============
+    const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzEWx8mkK4IJdDQHnbFaJPzxT8EzW9dcCLnsQRGWf0swJhb0IipF0FKzxPw8ejUM_uj/exec';
+
+    function submitConsultForm(e) {
+      e.preventDefault();
+      
+      if (isSubmitting) return;
+      
+      const name = document.getElementById('clientName').value.trim();
+      const phone1 = document.getElementById('phone1').value;
+      const phone2 = document.getElementById('phone2').value.trim();
+      const phone3 = document.getElementById('phone3').value.trim();
+      const agreePrivacy = document.getElementById('agreePrivacy').checked;
+      
+      // 유효성 검사
+      if (!name) { alert('성함을 입력해주세요.'); return; }
+      if (!phone2 || !phone3 || phone2.length < 3 || phone3.length < 4) {
+        alert('연락처를 정확히 입력해주세요.'); return;
+      }
+      if (!agreePrivacy) { alert('개인정보취급방침에 동의해주세요.'); return; }
+      
+      // 중복 제출 체크
+      const userKey = `submitted_${name}_${phone1}-${phone2}-${phone3}`;
+      if (localStorage.getItem(userKey)) {
+        alert('이미 해당 정보로 접수된 기록이 있습니다.');
+        return;
+      }
+      
+      isSubmitting = true;
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = '전송 중...';
+      
+      const now = new Date();
+      const phoneNumber = `${phone1}-${phone2}-${phone3}`;
+      
+      // FormData 생성
+      const fd = new FormData();
+      fd.append('작업 날짜', now.toLocaleDateString('ko-KR'));
+      fd.append('작업 시간', now.toLocaleTimeString('ko-KR'));
+      fd.append('사업장명(상호)', userData.company || '');
+      fd.append('사업자 형태', userData.business_type || '');
+      fd.append('업종', userData.industry || '');
+      fd.append('사업자 업력', userData.business_career || '');
+      fd.append('상시 근로자 수', userData.employee_count || 0);
+      fd.append('기업 분류 (자동 판단)', analysisResult.bizCategory || '');
+      fd.append('특허 보유 수', userData.patent_count || 0);
+      fd.append('기계/설비 보유', userData.has_machine || '');
+      fd.append('온라인 판매 여부', userData.online_sales || '');
+      fd.append('오프라인 매장', userData.offline_store || '');
+      fd.append('키오스크 사용', userData.kiosk || '');
+      fd.append('배달앱 사용', userData.delivery || '');
+      fd.append('숙박앱 사용', userData.reservation || '');
+      fd.append('연평균 매출액', userData.average_sales ? `${userData.average_sales}만원` : '');
+      fd.append('2년간 10%이상 성장', userData.sales_growth || '');
+      fd.append('담보대출 잔액', userData.mortgage_loan ? `${userData.mortgage_loan}만원` : '0');
+      fd.append('신용대출 잔액', userData.credit_loan ? `${userData.credit_loan}만원` : '0');
+      fd.append('KCB 신용점수', userData.KCB || '');
+      fd.append('NICE 신용점수', userData.NICE || '');
+      fd.append('연체/체납 여부', userData.overdue || '');
+      fd.append('예상 대출 한도', analysisResult.limit ? formatLimit(analysisResult.limit) : '');
+      fd.append('예상 금리', analysisResult.rate ? `${analysisResult.rate}%` : '');
+      
+      // 추천 상품 목록 (선택한 상품이 있으면 맨 앞에 표시)
+      let productNames = analysisResult.products.map(p => p.name);
+      if (selectedProduct) {
+        productNames = [selectedProduct.name + ' (선택)', ...productNames.filter(n => n !== selectedProduct.name)];
+      }
+      fd.append('추천 상품 목록', productNames.join(', '));
+      
+      fd.append('분석 일시', now.toLocaleString('ko-KR'));
+      fd.append('유입경로', sessionStorage.getItem('first_referrer') || 'UNKNOWN');
+      fd.append('개인정보수집동의', '동의');
+      fd.append('성함(이름)', name);
+      fd.append('연락처', phoneNumber);
+      
+      fetch(SHEET_URL, {
+        method: 'POST',
+        body: fd
+      })
+      .then(() => {
+        localStorage.setItem(userKey, 'submitted');
+        closeModal('consultModal');
+        openModal('successModal');
+        // 폼 리셋
+        document.getElementById('consultForm').reset();
+      })
+      .catch(err => {
+        console.error('전송 오류:', err);
+        alert('오류가 발생했습니다. 다시 시도해주세요.');
+      })
+      .finally(() => {
+        isSubmitting = false;
+        submitBtn.disabled = false;
+        submitBtn.textContent = '정책자금 상담 신청하기';
+      });
+    }
+
+    // 전화번호 입력 시 숫자만 허용
+    document.addEventListener('DOMContentLoaded', function() {
+      ['phone2', 'phone3'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9]/g, '');
+          });
+        }
+      });
+    });
+
     // ============ 데이터 정의 ============
     const industryQuestions = {
       '제조업': ['patent', 'machine'],
@@ -1669,6 +2594,16 @@
       const circumference = 2 * Math.PI * 54;
       const strokeDasharray = `${(probability / 100) * circumference} ${circumference}`;
 
+      // 분석 결과를 전역 변수에 저장
+      const bizCategory = userData.businessCategory || '소상공인';
+      analysisResult = {
+        limit: limit,
+        rate: rate,
+        probability: probability,
+        products: recommendedProducts,
+        bizCategory: bizCategory
+      };
+
       const chatMessages = document.getElementById('chatMessages');
       const resultCard = document.createElement('div');
       resultCard.className = 'result-card';
@@ -1725,7 +2660,7 @@
         const categoryColor = bizCategory === '소상공인' ? '#10b981' : '#6366f1';
         const categoryIcon = bizCategory === '소상공인' ? '🏪' : '🏢';
 
-        // 추천 상품 HTML (새로운 양식)
+        // 추천 상품 HTML (새로운 양식 + 신청하기 버튼)
         const productsHtml = recommendedProducts.map((p, idx) => `
           <div class="recommend-item">
             <div class="recommend-item-header">
@@ -1753,8 +2688,13 @@
                 <span class="recommend-info-value">${p.period}</span>
               </div>
               <div class="recommend-estimate">
-                <span>예상 한도: <strong>${formatLimit(p.estimatedLimit)}</strong></span>
-                <span>예상 금리: <strong>${p.estimatedRate.toFixed(2)}%</strong></span>
+                <div class="recommend-estimate-row">
+                  <span>예상 한도: <strong>${formatLimit(p.estimatedLimit)}</strong></span>
+                  <span>예상 금리: <strong>${p.estimatedRate.toFixed(2)}%</strong></span>
+                </div>
+                <button class="cta-item-btn" onclick='openModal("consultModal", ${JSON.stringify(p).replace(/'/g, "&#39;")})'>
+                  📝 신청하기
+                </button>
               </div>
             </div>
           </div>
@@ -1804,6 +2744,14 @@
             </div>
             <div class="gauge-label">${probability >= 80 ? '승인 가능성 매우 높음 🎉' : probability >= 60 ? '승인 가능성 양호 👍' : '조건 개선 권장 📊'}</div>
           </div>
+
+          <!-- 메인 CTA 버튼 -->
+          <button class="cta-main-btn" onclick="openModal('consultModal')">
+            📋 정책자금 신청하기
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
 
           <div class="result-stats">
             <div class="stat-card">
@@ -1980,14 +2928,4 @@
       });
 
       userInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter' && this.value.trim()) handleSubmit(this.value.trim());
-      });
-
-      sendBtn.addEventListener('click', function() {
-        const value = userInput.value.trim();
-        if (value) handleSubmit(value);
-      });
-    });
-  </script>
-</body>
-</html>
+        if (e.key === 'Enter' && this.value.trim()
