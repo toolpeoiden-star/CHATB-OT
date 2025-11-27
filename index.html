@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -10,8 +9,69 @@
   <title>정책자금 분석 챗봇</title>
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  
+  <!-- 소스코드 보호 -->
+  <script>
+  (function(){
+    // 우클릭 방지
+    document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+      return false;
+    });
+    
+    // 키보드 단축키 방지
+    document.addEventListener('keydown', function(e) {
+      // F12 방지
+      if (e.key === 'F12' || e.keyCode === 123) {
+        e.preventDefault();
+        return false;
+      }
+      // Ctrl+Shift+I (개발자도구)
+      if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.keyCode === 73)) {
+        e.preventDefault();
+        return false;
+      }
+      // Ctrl+Shift+J (콘솔)
+      if (e.ctrlKey && e.shiftKey && (e.key === 'J' || e.key === 'j' || e.keyCode === 74)) {
+        e.preventDefault();
+        return false;
+      }
+      // Ctrl+Shift+C (요소검사)
+      if (e.ctrlKey && e.shiftKey && (e.key === 'C' || e.key === 'c' || e.keyCode === 67)) {
+        e.preventDefault();
+        return false;
+      }
+      // Ctrl+U (소스보기)
+      if (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.keyCode === 85)) {
+        e.preventDefault();
+        return false;
+      }
+      // Ctrl+S (저장)
+      if (e.ctrlKey && (e.key === 'S' || e.key === 's' || e.keyCode === 83)) {
+        e.preventDefault();
+        return false;
+      }
+    });
+    
+    // 드래그 방지
+    document.addEventListener('dragstart', function(e) {
+      e.preventDefault();
+      return false;
+    });
+    
+    // 선택 방지 (입력 필드 제외)
+    document.addEventListener('selectstart', function(e) {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+        return true;
+      }
+      e.preventDefault();
+      return false;
+    });
+  })();
+  </script>
+  
   <style>
-    /* 모바일 최적화 변수 */
+    /* iframe 및 모바일 최적화 */
     :root {
       --safe-top: env(safe-area-inset-top, 0px);
       --safe-bottom: env(safe-area-inset-bottom, 0px);
@@ -22,23 +82,53 @@
       padding: 0;
       -webkit-tap-highlight-color: transparent;
     }
-    html { height: -webkit-fill-available; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    html { 
+      height: 100%;
+      height: -webkit-fill-available; 
+    }
     body {
       font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
       background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+      min-height: 100%;
       min-height: 100vh;
       min-height: -webkit-fill-available;
-      overflow: hidden;
       -webkit-font-smoothing: antialiased;
       touch-action: manipulation;
+      /* 선택 방지 */
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+    /* 입력 필드는 선택 허용 */
+    input, textarea {
+      -webkit-user-select: text;
+      -moz-user-select: text;
+      -ms-user-select: text;
+      user-select: text;
     }
     .chatbot-container {
       display: flex;
       flex-direction: column;
+      width: 100%;
+      height: 100%;
       height: 100vh;
       height: 100dvh;
       max-width: 100%;
-      margin: 0 auto;
+      margin: 0;
+      padding: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
     }
 
     /* 헤더 */
@@ -784,6 +874,51 @@
 
     .svg-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
 
+    /* ============ 분석하기 버튼 스타일 ============ */
+    .analysis-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 18px 20px;
+      margin-top: 16px;
+      background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
+      color: white;
+      font-size: 16px;
+      font-weight: 700;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+      font-family: inherit;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .analysis-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+      animation: analysis-shine 2s infinite;
+    }
+    @keyframes analysis-shine {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+    .analysis-btn:active {
+      transform: scale(0.98);
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35);
+    }
+    @media (max-width: 480px) {
+      .analysis-btn { font-size: 15px; padding: 16px 16px; }
+    }
+
     /* ============ CTA 버튼 스타일 ============ */
     .cta-main-btn {
       display: flex;
@@ -1062,6 +1197,13 @@
       transform: none;
       box-shadow: none;
     }
+    .analysis-submit-btn {
+      background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
+    }
+    .analysis-submit-btn:active {
+      transform: scale(0.98);
+    }
 
     /* 개인정보취급방침 모달 */
     .privacy-modal-content {
@@ -1144,7 +1286,7 @@
       <div class="header-content">
         <div class="header-avatar">💼</div>
         <div class="header-info">
-          <h1>개인에게 맞는 정책자금 분석 서비스</h1>
+          <h1>정책자금 분석</h1>
           <span class="header-status">
             <span class="status-dot"></span>
             응답 가능
@@ -1172,6 +1314,43 @@
         </button>
       </div>
     </footer>
+  </div>
+
+  <!-- 분석/조회 신청 모달 -->
+  <div id="analysisModal" class="modal-overlay">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('analysisModal')">&times;</button>
+      <div class="modal-header">
+        <h3>📊 정책자금 분석/조회 서비스</h3>
+        <p>맞춤 분석 결과를 상담사가 직접 안내해드립니다</p>
+      </div>
+      <form id="analysisForm" onsubmit="submitAnalysisForm(event)">
+        <div class="form-group">
+          <label class="form-label">성함(이름)<span class="required">*</span></label>
+          <input type="text" id="analysisName" class="form-input" placeholder="대표자 성함" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">연락처<span class="required">*</span></label>
+          <div class="phone-input-group">
+            <select id="analysisPhone1">
+              <option value="010">010</option>
+              <option value="011">011</option>
+            </select>
+            <input type="text" id="analysisPhone2" class="form-input" maxlength="4" inputmode="numeric" placeholder="0000" required>
+            <input type="text" id="analysisPhone3" class="form-input" maxlength="4" inputmode="numeric" placeholder="0000" required>
+          </div>
+        </div>
+        <div class="agreement-box">
+          <input type="checkbox" id="analysisAgreePrivacy" required>
+          <label for="analysisAgreePrivacy">
+            <span class="privacy-link" onclick="openModal('privacyModal'); event.stopPropagation();">개인정보 수집·이용 동의 [보기]</span> <span style="color:#ef4444;">*</span>
+          </label>
+        </div>
+        <button type="submit" class="submit-btn analysis-submit-btn" id="analysisSubmitBtn">
+          ✅ 자금분석결과 · 무료자문상담 받기
+        </button>
+      </form>
+    </div>
   </div>
 
   <!-- 상담 신청 모달 -->
@@ -1302,6 +1481,15 @@
     };
     let selectedProduct = null;
     let isSubmitting = false;
+
+    // ============ 분석 모달 함수 ============
+    function openAnalysisModal() {
+      const modal = document.getElementById('analysisModal');
+      if (modal) {
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+      }
+    }
 
     // ============ 모달 함수 ============
     function openModal(modalId, productInfo = null) {
@@ -1441,9 +1629,128 @@
       });
     }
 
+    // ============ 분석 신청 폼 제출 ============
+    function submitAnalysisForm(e) {
+      e.preventDefault();
+      
+      if (isSubmitting) return;
+      
+      const name = document.getElementById('analysisName').value.trim();
+      const phone1 = document.getElementById('analysisPhone1').value;
+      const phone2 = document.getElementById('analysisPhone2').value.trim();
+      const phone3 = document.getElementById('analysisPhone3').value.trim();
+      const agreePrivacy = document.getElementById('analysisAgreePrivacy').checked;
+      
+      if (!name || !phone2 || !phone3) {
+        alert('모든 필수 항목을 입력해주세요.');
+        return;
+      }
+      
+      if (!agreePrivacy) {
+        alert('개인정보 수집·이용에 동의해주세요.');
+        return;
+      }
+      
+      if (phone2.length < 3 || phone3.length < 4) {
+        alert('연락처를 정확히 입력해주세요.');
+        return;
+      }
+      
+      // 중복 체크
+      const phoneNumber = `${phone1}-${phone2}-${phone3}`;
+      const userKey = `analysis_${phoneNumber}`;
+      if (localStorage.getItem(userKey)) {
+        alert('이미 분석 신청이 완료되었습니다.\n상담사가 곧 연락드릴 예정입니다.');
+        return;
+      }
+      
+      isSubmitting = true;
+      const submitBtn = document.getElementById('analysisSubmitBtn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = '신청 중...';
+      
+      const fd = new FormData();
+      const now = new Date();
+      fd.append('작업날짜', now.toLocaleDateString('ko-KR'));
+      fd.append('작업시간', now.toLocaleTimeString('ko-KR'));
+      
+      // 사업자 정보
+      fd.append('사업자분류', userData.company || '');
+      fd.append('사업자종류', userData.business_type || '');
+      fd.append('업종', userData.industry || '');
+      fd.append('업력', userData.business_career || '');
+      fd.append('특허여부', userData.patent_count > 0 ? '있음' : '없음');
+      fd.append('기계설비여부', userData.has_machine || '');
+      fd.append('연간매출액', userData.average_sales ? `${userData.average_sales}만원` : '');
+      fd.append('매출성장률', userData.sales_growth || '');
+      fd.append('담보대출잔액', userData.mortgage_loan ? `${userData.mortgage_loan}만원` : '0');
+      fd.append('신용대출잔액', userData.credit_loan ? `${userData.credit_loan}만원` : '0');
+      fd.append('KCB 신용점수', userData.KCB || '');
+      fd.append('NICE 신용점수', userData.NICE || '');
+      fd.append('연체/체납 여부', userData.overdue || '');
+      fd.append('신청유형', '분석 전 신청');
+      fd.append('UTM source', sessionStorage.getItem('utm_source') || '');
+      fd.append('UTM medium', sessionStorage.getItem('utm_medium') || '');
+      fd.append('UTM campaign', sessionStorage.getItem('utm_campaign') || '');
+      fd.append('유입경로', sessionStorage.getItem('first_referrer') || 'UNKNOWN');
+      fd.append('개인정보수집동의', '동의');
+      fd.append('성함(이름)', name);
+      fd.append('연락처', phoneNumber);
+      
+      fetch(SHEET_URL, {
+        method: 'POST',
+        body: fd
+      })
+      .then(() => {
+        localStorage.setItem(userKey, 'submitted');
+        closeModal('analysisModal');
+        
+        // 완료 메시지 표시
+        const chatMessages = document.getElementById('chatMessages');
+        const wrapper = document.createElement('div');
+        wrapper.className = 'message-wrapper bot';
+        wrapper.innerHTML = `
+          <div class="bot-avatar">🤖</div>
+          <div class="message-content">
+            <div class="section-badge">신청 완료</div>
+            <div class="message-bubble bot">
+              <div class="message-text">
+                <strong>✅ 분석 신청이 완료되었습니다!</strong><br><br>
+                ${name}님, 감사합니다.<br><br>
+                전문 상담사가 <strong>빠른 시간 내에</strong><br>
+                <strong>${phoneNumber}</strong>로 연락드릴 예정입니다.<br><br>
+                📞 맞춤 정책자금 분석 결과와<br>
+                무료 자문 상담을 받아보세요!
+              </div>
+              <button class="restart-btn" onclick="resetChat()" style="margin-top:16px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" />
+                </svg>
+                <span>처음부터 다시하기</span>
+              </button>
+            </div>
+            <span class="message-time">${getTime()}</span>
+          </div>
+        `;
+        chatMessages.appendChild(wrapper);
+        scrollToBottom();
+        
+        // 폼 리셋
+        document.getElementById('analysisForm').reset();
+      })
+      .catch(err => {
+        alert('오류가 발생했습니다. 다시 시도해주세요.');
+      })
+      .finally(() => {
+        isSubmitting = false;
+        submitBtn.disabled = false;
+        submitBtn.textContent = '✅ 자금분석결과 · 무료자문상담 받기';
+      });
+    }
+
     // 전화번호 입력 시 숫자만 허용
     document.addEventListener('DOMContentLoaded', function() {
-      ['phone2', 'phone3'].forEach(id => {
+      ['phone2', 'phone3', 'analysisPhone2', 'analysisPhone3'].forEach(id => {
         const el = document.getElementById(id);
         if (el) {
           el.addEventListener('input', function() {
@@ -1869,6 +2176,16 @@
       } else if (question.type === 'choice' && question.options) {
         buttonsHtml = `<div class="choice-buttons">${question.options.map(opt => `<button class="choice-btn" onclick="handleSubmit('${opt}')">${opt}</button>`).join('')}</div>`;
       }
+      
+      // 분석하기 버튼 추가
+      if (question.showAnalysisBtn) {
+        buttonsHtml = `<button class="analysis-btn" onclick="openAnalysisModal()">
+          <span>📊 내 업장에 맞는 정책자금 분석하기</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>`;
+      }
 
       wrapper.innerHTML = `
         <div class="bot-avatar">🤖</div>
@@ -1891,7 +2208,7 @@
       
       if (question.type === 'text' || question.type === 'number') {
         chatInput.classList.add('active');
-        userInput.placeholder = question.placeholder || '메시지를 입력하세요...';
+        userInput.placeholder = question.placeholder || '여기에 입력하세요';
         userInput.dataset.type = question.type;
         userInput.value = '';
         userInput.focus();
@@ -1976,12 +2293,14 @@
         showTyping();
         setTimeout(() => {
           hideTyping();
-          addBotMessage({ text: '분석 중입니다... ✨\n\n최적의 정책자금을 찾고 있어요!', section: 'loading' }, false);
-          setTimeout(() => {
-            document.getElementById('chatInput').classList.remove('active');
-            document.getElementById('headerProgress').classList.remove('active');
-            showResult();
-          }, 2000);
+          // 분석 전 신청 버튼 표시
+          addBotMessage({ 
+            text: '입력해주신 정보를 바탕으로\n<strong>맞춤 정책자금 분석</strong>을 진행해드립니다! 🎯\n\n아래 버튼을 클릭해주세요.', 
+            section: '분석 준비 완료',
+            showAnalysisBtn: true 
+          }, false);
+          document.getElementById('chatInput').classList.remove('active');
+          document.getElementById('headerProgress').classList.remove('active');
         }, 600);
       }
 
