@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -277,23 +278,29 @@
       box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
     }
     .send-btn {
-      width: 50px;
+      min-width: 70px;
       height: 50px;
+      padding: 0 16px;
       background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
       border: none;
-      border-radius: 50%;
+      border-radius: 25px;
       color: white;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
+      gap: 6px;
       transition: all 0.25s;
       box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
       flex-shrink: 0;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: inherit;
     }
+    .send-btn .send-text { display: inline; }
     .send-btn:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
-    .send-btn:not(:disabled):hover { transform: scale(1.08); box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5); }
-    .send-btn:not(:disabled):active { transform: scale(1); }
+    .send-btn:not(:disabled):hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5); }
+    .send-btn:not(:disabled):active { transform: scale(0.98); }
 
     /* 결과 카드 */
     .result-card {
@@ -718,9 +725,9 @@
       .header-info p { font-size: 11px; }
       .chat-messages { padding: 8px 6px; gap: 12px; -webkit-overflow-scrolling: touch; }
       .chat-input { padding: 8px 6px; padding-bottom: calc(8px + var(--safe-bottom)); }
-      .input-wrapper { max-width: 100%; gap: 6px; }
-      .input-wrapper input { font-size: 16px !important; padding: 12px 14px; border-radius: 20px; }
-      .send-btn { width: 44px; height: 44px; min-width: 44px; flex-shrink: 0; }
+      .input-wrapper { max-width: 100%; gap: 8px; }
+      .input-wrapper input { font-size: 16px !important; padding: 14px 16px; border-radius: 22px; flex: 1; min-width: 0; }
+      .send-btn { min-width: 64px; height: 48px; padding: 0 14px; font-size: 15px; border-radius: 24px; }
       .choice-btn { padding: 10px 14px; font-size: 14px; min-height: 44px; border-radius: 16px; }
       .choice-buttons { gap: 6px; }
       .start-btn { padding: 14px 18px; font-size: 15px; min-height: 48px; border-radius: 14px; }
@@ -771,8 +778,8 @@
       .stat-value { font-size: 15px; }
       .cta-main-btn { font-size: 14px; padding: 12px 10px; }
       .header-info h1 { font-size: 14px; }
-      .input-wrapper input { padding: 10px 12px; }
-      .send-btn { width: 40px; height: 40px; min-width: 40px; }
+      .input-wrapper input { padding: 12px 14px; }
+      .send-btn { min-width: 58px; height: 44px; padding: 0 12px; font-size: 14px; }
     }
 
     .svg-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
@@ -1156,9 +1163,10 @@
 
     <footer class="chat-input" id="chatInput">
       <div class="input-wrapper">
-        <input type="text" id="userInput" placeholder="메시지를 입력하세요..." autocomplete="off">
+        <input type="text" id="userInput" placeholder="여기에 입력하세요" autocomplete="off">
         <button class="send-btn" id="sendBtn" disabled>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <span class="send-text">전송</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
           </svg>
         </button>
@@ -1171,7 +1179,7 @@
     <div class="modal-content">
       <button class="modal-close" onclick="closeModal('consultModal')">&times;</button>
       <div class="modal-header">
-        <h3>📋 정책자금 상담 신청</h3>
+        <h3>📞 무료자문상담 신청</h3>
         <p>전문 상담사가 빠르게 연락드립니다</p>
       </div>
       <div id="modalProductInfo" class="modal-product-info" style="display:none;">
@@ -1799,9 +1807,9 @@
         { key: 'sales_growth', text: '최근 2년간 매출이 10% 이상 성장했나요?\n\n💡 성장기업은 금리 0.2%p 우대!', type: 'choice', options: ['예', '아니오'], section: '매출 정보' },
         { key: 'mortgage_loan', text: '현재 담보대출 잔액을 입력해주세요.\n(단위: 만원)', type: 'number', placeholder: '없으면 0', section: '대출 정보' },
         { key: 'credit_loan', text: '현재 신용대출 잔액을 입력해주세요.\n(단위: 만원)\n\n💡 기존 부채가 적을수록 승인 확률 UP!', type: 'number', placeholder: '없으면 0', section: '대출 정보' },
-        { key: 'KCB', text: 'KCB 신용점수를 입력해주세요.\n\n💡 모르시면 카카오뱅크 앱에서 확인 가능!', type: 'number', placeholder: '예: 750', section: '신용 정보' },
-        { key: 'NICE', text: 'NICE 신용점수를 입력해주세요.\n\n💡 850점 이상 시 최저금리 3.1% 적용!', type: 'number', placeholder: '예: 800', section: '신용 정보' },
-        { key: 'overdue', text: '현재 연체 또는 체납이 있으신가요?\n\n⚠️ 연체 시 정책자금 이용 불가', type: 'choice', options: ['없음', '있음'], section: '신용 정보' }
+        { key: 'KCB', text: 'KCB 신용점수를 입력해주세요.\n\n💡 모르시면 카카오뱅크 앱이나 토스에서\n쉽게 확인 가능해요!', type: 'number', placeholder: '예: 750', section: '신용 정보' },
+        { key: 'NICE', text: 'NICE 신용점수를 입력해주세요.\n\n💡 모르시면 카카오뱅크 앱이나 토스에서\n쉽게 확인 가능해요!', type: 'number', placeholder: '예: 800', section: '신용 정보' },
+        { key: 'overdue', text: '현재 연체 또는 체납이 있으신가요?\n\n⚠️ 연체 시 정책자금 이용이 불가합니다', type: 'choice', options: ['없음', '있음'], section: '신용 정보' }
       ];
 
       return [...base, ...industrySpecific, ...remaining];
@@ -2473,7 +2481,7 @@
                   <span>예상 금리: <strong>${p.estimatedRate.toFixed(2)}%</strong></span>
                 </div>
                 <button class="cta-item-btn" onclick='openModal("consultModal", ${JSON.stringify(p).replace(/'/g, "&#39;")})'>
-                  📝 신청하기
+                  📞 무료자문상담
                 </button>
               </div>
             </div>
@@ -2527,7 +2535,7 @@
 
           <!-- 메인 CTA 버튼 -->
           <button class="cta-main-btn" onclick="openModal('consultModal')">
-            📋 정책자금 신청하기
+            ✅ 승인가능여부 조회
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
